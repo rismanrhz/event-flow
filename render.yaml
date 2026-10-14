@@ -1,0 +1,49 @@
+databases:
+  - name: eventflow-db
+    databaseName: eventflow
+    user: eventflow
+    plan: free
+    region: singapore
+
+services:
+  - type: web
+    name: eventflow-api
+    runtime: docker
+    dockerfilePath: backend/Dockerfile
+    dockerContext: backend
+    plan: free
+    region: singapore
+    healthCheckPath: /
+    envVars:
+      - key: APP_NAME
+        value: EventFlow
+      - key: APP_ENV
+        value: production
+      - key: APP_DEBUG
+        value: false
+      - key: APP_KEY
+        value: base64:wyIVWunmEDd4bXQkeONX3h0sDhocNFTiO/EpHlZotjY=
+      - key: APP_URL
+        value: https://eventflow-api.onrender.com
+      - key: FRONTEND_URL
+        value: https://frontend-blond-eight-61.vercel.app
+      - key: LOG_CHANNEL
+        value: stack
+      - key: DB_CONNECTION
+        value: pgsql
+      - key: DATABASE_URL
+        fromDatabase:
+          name: eventflow-db
+          property: connectionString
+      - key: SESSION_DRIVER
+        value: file
+      - key: CACHE_DRIVER
+        value: file
+      - key: FILESYSTEM_DISK
+        value: local
+      - key: QUEUE_CONNECTION
+        value: sync
+      - key: BROADCAST_DRIVER
+        value: log
+      - key: MAIL_MAILER
+        value: log
